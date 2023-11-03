@@ -1,30 +1,33 @@
 package pokecache
 
-// https://pokeapi.co/api/v2/pokemon/
-
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
-func (c *Client) GetPokemon(pokemon string) (Pokemon, error) {
+func (c *Client) GetEnounters(location string) (PokemonEncounters, error) {
 
-	urlToUse := base + "/pokemon/" + pokemon
+	urlToUse := base + "/location-area/" + location
+	fmt.Printf("URL In Use: %v\n", urlToUse)
 
 	// Check Cache
-	if value, ok := c.PokeCache.Get(pokemon); ok {
-		resp := Pokemon{}
+	fmt.Println("Checking Cache")
+	if value, ok := c.EnounterCache.Get(location); ok {
+		resp := PokemonEncounters{}
 		err := json.Unmarshal(value, &resp)
 		if err != nil {
-			return Pokemon{}, err
+			return PokemonEncounters{}, err
 		}
+		fmt.Println("Found Resposne")
 		return resp, nil
 	}
 
 	// Call API if not in cache
-	r := Pokemon{}
+	fmt.Println("Calling API")
+	r := PokemonEncounters{}
 	res, err := http.Get(urlToUse)
 	if err != nil {
 		log.Fatal(err)
@@ -41,10 +44,9 @@ func (c *Client) GetPokemon(pokemon string) (Pokemon, error) {
 	}
 
 	if err := json.Unmarshal([]byte(body), &r); err != nil {
-		return Pokemon{}, err
+		return PokemonEncounters{}, err
 	}
 
-	c.PokeCache.Add(pokemon, body)
-
+	c.PokeCache.Add(location, body)
 	return r, nil
 }

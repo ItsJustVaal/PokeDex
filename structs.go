@@ -7,6 +7,7 @@ type Config struct {
 	Next     *string
 	Previous *string
 	Explore  *string
+	Pokemon  *string
 }
 
 type CliCommand struct {

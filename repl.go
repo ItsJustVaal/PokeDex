@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"pokedex/pokecache"
 	"strings"
@@ -11,6 +12,7 @@ import (
 
 func startRepl() {
 	reader := bufio.NewScanner(os.Stdin)
+	rand.Seed(time.Now().UTC().UnixNano())
 	c := Config{
 		Client: pokecache.NewClient(5*time.Second, time.Minute*5),
 	}
@@ -24,8 +26,14 @@ func startRepl() {
 		}
 
 		commandName := words[0]
-		if len(words) > 1 && words[1] != "" {
-			c.Explore = &words[1]
+		if commandName == "explore" {
+			if len(words) > 1 && words[1] != "" {
+				c.Explore = &words[1]
+			}
+		} else if commandName == "catch" {
+			if len(words) > 1 && words[1] != "" {
+				c.Pokemon = &words[1]
+			}
 		}
 
 		command, exists := getCommands()[commandName]
@@ -74,6 +82,11 @@ func getCommands() map[string]CliCommand {
 			name:        "explore",
 			description: "Displays the pokemon encounters for an area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Displays the pokemon encounters for an area",
+			callback:    catchPokemon,
 		},
 	}
 }
