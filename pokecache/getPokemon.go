@@ -8,22 +8,18 @@ import (
 	"net/http"
 )
 
-func (c *Client) GetLocations(pageURL *string) (JsonResponse, error) {
-	// Sets base URL if it doesn't have one passed in
-	urlToUse := base + "/location-area"
-	fmt.Println(urlToUse)
-	if pageURL != nil {
-		urlToUse = *pageURL
-	}
+func (c *Client) GetPokemon(location string) (PokemonEncounters, error) {
+
+	urlToUse := base + "/location-area/" + location
 	fmt.Printf("URL In Use: %v\n", urlToUse)
 
 	// Check Cache
 	fmt.Println("Checking Cache")
-	if value, ok := c.Cache.Get(urlToUse); ok {
-		resp := JsonResponse{}
+	if value, ok := c.PokeCache.Get(location); ok {
+		resp := PokemonEncounters{}
 		err := json.Unmarshal(value, &resp)
 		if err != nil {
-			return JsonResponse{}, err
+			return PokemonEncounters{}, err
 		}
 		fmt.Println("Found Resposne")
 		return resp, nil
@@ -31,7 +27,7 @@ func (c *Client) GetLocations(pageURL *string) (JsonResponse, error) {
 
 	// Call API if not in cache
 	fmt.Println("Calling API")
-	r := JsonResponse{}
+	r := PokemonEncounters{}
 	res, err := http.Get(urlToUse)
 	if err != nil {
 		log.Fatal(err)
@@ -48,9 +44,9 @@ func (c *Client) GetLocations(pageURL *string) (JsonResponse, error) {
 	}
 
 	if err := json.Unmarshal([]byte(body), &r); err != nil {
-		return JsonResponse{}, err
+		return PokemonEncounters{}, err
 	}
 
-	c.Cache.Add(urlToUse, body)
+	c.PokeCache.Add(location, body)
 	return r, nil
 }

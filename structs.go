@@ -6,6 +6,7 @@ type Config struct {
 	Client   pokecache.Client
 	Next     *string
 	Previous *string
+	Explore  *string
 }
 
 type CliCommand struct {

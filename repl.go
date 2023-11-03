@@ -24,6 +24,9 @@ func startRepl() {
 		}
 
 		commandName := words[0]
+		if len(words) > 1 && words[1] != "" {
+			c.Explore = &words[1]
+		}
 
 		command, exists := getCommands()[commandName]
 		if exists {
@@ -66,6 +69,11 @@ func getCommands() map[string]CliCommand {
 			name:        "mapb",
 			description: "Displays the previous 20 locations",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Displays the pokemon encounters for an area",
+			callback:    commandExplore,
 		},
 	}
 }
