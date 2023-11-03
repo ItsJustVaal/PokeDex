@@ -4,16 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"pokedex/pokecache"
 	"strings"
+	"time"
 )
 
 func startRepl() {
 	reader := bufio.NewScanner(os.Stdin)
 	c := Config{
-		Base:     "https://pokeapi.co/api/v2/location-area/",
-		Next:     "",
-		Previous: "",
-		Page:     0,
+		Client: pokecache.NewClient(5*time.Second, time.Minute*5),
 	}
 	for {
 		fmt.Print("Pokedex > ")

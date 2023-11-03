@@ -1,18 +1,11 @@
 package main
 
-type Config struct {
-	Base     string
-	Next     string
-	Previous string
-	Page     int
-}
+import "pokedex/pokecache"
 
-type JsonResponse struct {
-	Next     string `json:"next"`
-	Previous string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-	} `json:"results"`
+type Config struct {
+	Client   pokecache.Client
+	Next     *string
+	Previous *string
 }
 
 type CliCommand struct {
