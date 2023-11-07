@@ -30,7 +30,7 @@ func startRepl() {
 			if len(words) > 1 && words[1] != "" {
 				c.Explore = &words[1]
 			}
-		} else if commandName == "catch" || commandName == "data" {
+		} else if commandName == "catch" || commandName == "inspect" {
 			if len(words) > 1 && words[1] != "" {
 				c.Pokemon = &words[1]
 			}
@@ -88,10 +88,15 @@ func getCommands() map[string]CliCommand {
 			description: "Displays the pokemon encounters for an area",
 			callback:    catchPokemon,
 		},
-		"data": {
-			name:        "data",
+		"inspect": {
+			name:        "inspect",
 			description: "Displays the data for a pokemon in the pokedex",
 			callback:    commandData,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Displays all Pokemon currently in Pokedex",
+			callback:    commandPokedex,
 		},
 	}
 }
