@@ -10,7 +10,7 @@ import (
 
 func (c *Client) GetLocations(pageURL *string) (JsonResponse, error) {
 	// Sets base URL if it doesn't have one passed in
-	urlToUse := base + "/location-area"
+	urlToUse := base + "/location-area?offset=0&limit=20"
 	fmt.Println(urlToUse)
 	if pageURL != nil {
 		urlToUse = *pageURL

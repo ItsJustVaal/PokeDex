@@ -12,7 +12,7 @@ import (
 
 func startRepl() {
 	reader := bufio.NewScanner(os.Stdin)
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.NewSource(time.Now().UTC().UnixNano())
 	c := Config{
 		Client: pokecache.NewClient(5*time.Second, time.Minute*5),
 	}
@@ -30,7 +30,7 @@ func startRepl() {
 			if len(words) > 1 && words[1] != "" {
 				c.Explore = &words[1]
 			}
-		} else if commandName == "catch" {
+		} else if commandName == "catch" || commandName == "data" {
 			if len(words) > 1 && words[1] != "" {
 				c.Pokemon = &words[1]
 			}
@@ -87,6 +87,11 @@ func getCommands() map[string]CliCommand {
 			name:        "catch",
 			description: "Displays the pokemon encounters for an area",
 			callback:    catchPokemon,
+		},
+		"data": {
+			name:        "data",
+			description: "Displays the data for a pokemon in the pokedex",
+			callback:    commandData,
 		},
 	}
 }
